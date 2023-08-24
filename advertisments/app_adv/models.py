@@ -13,7 +13,8 @@ class Advertisement(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
-    image = models.ImageField("Изображение", upload_to='advertisements/')
+    image = models.ImageField('Изображение', upload_to='advertisements/')
+
     @admin.display(description='Дата создания')
     def created_date(self):
         from django.utils import timezone
@@ -33,6 +34,11 @@ class Advertisement(models.Model):
         return self.created_at.strftime('%d.%m.%Y в %H:%M:%S')
 
         updated_at = models.DateTimeField(auto_now=True)
+
+    @admin.display(description='фото')
+    def get_html_image(self):
+        if self.image:
+            return format_html('<img src="{url}" style="max-width: 80px; max-height: 80px;"', url=self.image.url)
 
     class Meta:
         db_table = 'advertisements'
